@@ -14,6 +14,7 @@ export default function SearchBar(props: ISearchBarProps): JSX.Element {
         <SearchOutlined></SearchOutlined>
       </S.SearchIcon>
       <S.SearchInput
+        type="text"
         placeholder="검색하면 원하시는 상품을 찾을 수 있어요!!! -_-"
         onChange={props.onChangeSearch}
       ></S.SearchInput>

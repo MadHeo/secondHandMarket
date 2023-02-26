@@ -10,12 +10,12 @@ interface IUseSearchBarArgs {
 }
 
 export const useSearchBar = (args: IUseSearchBarArgs) => {
-  const getDebounce = _.debounce((value: string) => {
+  const getDebounce = _.debounce((value) => {
     void args.refetch({ search: value, page: 1 });
-  }, 1000);
+  }, 500);
 
   const onChangeSearch = (event: ChangeEvent<HTMLInputElement>) => {
-    getDebounce(event.target.value);
+    getDebounce(event.currentTarget.value);
   };
 
   return { onChangeSearch };

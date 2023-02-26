@@ -1,5 +1,7 @@
+import { keyframes } from "@emotion/react";
 import styled from "@emotion/styled";
-import LayoutAside from "./\baside";
+import { useEffect, useState } from "react";
+import LayoutAside from "./\baside/aside.index";
 import LayoutNavigation from "./navi";
 
 const MainBox = styled.div`
@@ -14,9 +16,12 @@ const SectionBox = styled.div`
   flex-direction: column;
   align-items: center;
   background-color: white;
+  position: relative;
 `;
 
 export default function Layout(props): JSX.Element {
+  const [position, setPosition] = useState(0);
+
   return (
     <MainBox>
       <LayoutNavigation></LayoutNavigation>
