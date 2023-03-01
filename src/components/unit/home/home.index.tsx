@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 export default function HomePageIndex(): JSX.Element {
   const [position, setPosition] = useState(0);
+  const homeImg = [1, 2, 3, 4, 5, 6, 7];
 
   useEffect(() => {
     window.addEventListener("scroll", (Scroll) => {});
@@ -24,30 +25,14 @@ export default function HomePageIndex(): JSX.Element {
             src="/image/circle.png/"
             alt=""
             id="circle"
-            style={{ transform: `rotate(${position / 5}deg)` }}
+            style={{ transform: `rotate(${position / 8}deg)` }}
           />
         </S.CircleBox>
-        <S.BackgroundImageBox>
-          <img src="/image/home1.jpeg/" alt="" />
-        </S.BackgroundImageBox>
-        <S.BackgroundImageBox>
-          <img src="/image/home4.jpeg/" alt="" />
-        </S.BackgroundImageBox>
-        <S.BackgroundImageBox>
-          <img src="/image/home3.jpeg/" alt="" />
-        </S.BackgroundImageBox>
-        <S.BackgroundImageBox>
-          <img src="/image/home2.jpeg/" alt="" />
-        </S.BackgroundImageBox>
-        <S.BackgroundImageBox>
-          <img src="/image/home5.jpeg/" alt="" />
-        </S.BackgroundImageBox>
-        <S.BackgroundImageBox>
-          <img src="/image/home6.jpeg/" alt="" />
-        </S.BackgroundImageBox>
-        <S.BackgroundImageBox>
-          <img src="/image/home7.jpeg/" alt="" />
-        </S.BackgroundImageBox>
+        {homeImg.map((e) => (
+          <S.BackgroundImageBox>
+            <img src={`/image/home${e}.jpeg/`} />
+          </S.BackgroundImageBox>
+        ))}
       </S.MainBox>
     </>
   );

@@ -4,12 +4,17 @@ import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import * as S from "./aside.style";
 import { accessTokenState } from "../../store";
+import Link from "next/link";
 
 const FETCH_USER_LOGGED_IN = gql`
   query {
     fetchUserLoggedIn {
       email
       name
+      userPoint {
+        _id
+        amount
+      }
     }
   }
 `;
@@ -38,7 +43,9 @@ export default function LayoutAside(): JSX.Element {
     await logout();
   };
 
-  useEffect(() => {});
+  const onClickCharge = async () => {
+    router.push("/charge");
+  };
 
   return (
     <S.MainBox>
@@ -54,7 +61,10 @@ export default function LayoutAside(): JSX.Element {
           <div></div>
         ) : (
           <>
-            <S.MenuButton onClick={onClickLogin}>로그인</S.MenuButton>
+            <Link href={"/login"}>
+              <S.MenuButton>로그인</S.MenuButton>
+            </Link>
+
             <S.MenuButton onClick={onClickSignUp}>회원가입</S.MenuButton>
           </>
         )}
@@ -62,8 +72,10 @@ export default function LayoutAside(): JSX.Element {
       <S.PointBox>
         {accessToken ? (
           <>
-            <S.PointText>{`포인트 : 000P`}</S.PointText>
-            <S.ChargeButton>포인트 충전하기</S.ChargeButton>{" "}
+            <S.PointText>{`포인트 : ${data?.fetchUserLoggedIn.userPoint.amount.toLocaleString()}P`}</S.PointText>
+            <S.ChargeButton onClick={onClickCharge}>
+              포인트 충전하기
+            </S.ChargeButton>{" "}
             <S.LogoutButton onClick={onClickLogout}>로그아웃</S.LogoutButton>
           </>
         ) : (

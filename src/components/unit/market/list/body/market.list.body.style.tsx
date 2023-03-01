@@ -26,11 +26,13 @@ export const Scroll = styled(InfiniteScroll)`
 `;
 
 export const CardsBox = styled.div`
-  height: 1000px;
+  height: 910px;
+  width: 90%;
   overflow: auto;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  position: relative;
 `;
 
 export const ProductCard = styled.article`
@@ -61,7 +63,8 @@ export const ProductCardTextBox = styled.article`
   justify-content: flex-start;
   align-items: flex-start;
   padding: 10px 20px;
-  background-color: #a197ff;
+  background-color: #b0a5ff;
+  border-top: 4px solid black;
 
   span:nth-child(1) {
     font-size: 18px;
@@ -192,3 +195,23 @@ export const PageNumberBox = styled.div`
 // export const IconNextArrow = styled(FaAngleRight)`
 //   cursor: pointer;
 // `;
+
+export const CircleBox = styled.div`
+  width: 243px;
+  height: 243px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  bottom: 100px;
+  left: 1200px;
+  transition: all 0.4s ease 0s;
+
+  :hover {
+    transform: scale(1.05);
+  }
+
+  img {
+  }
+`;

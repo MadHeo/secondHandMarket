@@ -1,10 +1,21 @@
+import { useEffect, useState } from "react";
 import { useQueryFetchUseditems } from "../../../../../hooks/api/query/useQueryFetchUseditems";
-import { useMoveToPage } from "../../../../../hooks/commons/useMoveToPage";
+import { useMoveToPage } from "../../../../../hooks/custom/useMoveToPage";
 import * as S from "./market.list.body.style";
 
 export default function MarketListBody(props): JSX.Element {
   const { data, refetch, fetchMore } = useQueryFetchUseditems();
   const { onClickMoveToPage } = useMoveToPage();
+  const [position, setPosition] = useState(0);
+
+  useEffect(() => {
+    window.addEventListener("scroll", (Scroll) => {});
+  }, []);
+
+  const on = () => {
+    const mainBox = document.getElementById("box");
+    setPosition(mainBox?.scrollTop);
+  };
 
   const onLoadMore = (): void => {
     if (data === undefined) return;
@@ -31,7 +42,15 @@ export default function MarketListBody(props): JSX.Element {
   return (
     <div>
       <S.MainBox>
-        <S.CardsBox>
+        <S.CircleBox>
+          <img
+            src="/image/circle.png/"
+            alt=""
+            id="circle"
+            style={{ transform: `rotate(${position / 8}deg)` }}
+          />
+        </S.CircleBox>
+        <S.CardsBox id="box" onScroll={on}>
           <S.Scroll
             pageStart={0}
             loadMore={onLoadMore}
@@ -41,7 +60,7 @@ export default function MarketListBody(props): JSX.Element {
             {props.data?.fetchUseditems.map((el) => (
               <S.ProductCard
                 key={el._id}
-                onClick={onClickMoveToPage(`/products/${el._id}`)}
+                onClick={onClickMoveToPage(`/market/${el._id}`)}
               >
                 <S.ProductCardImageBox>
                   {el.images[0] ? (
