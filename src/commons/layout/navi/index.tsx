@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import * as S from "./navi.style";
 
 export const FETCH_USED_ITEM = gql`
@@ -36,8 +36,7 @@ export default function LayoutNavigation(): JSX.Element {
   });
 
   const onClickLogo = () => {
-    // router.push("/home/");
-    console.log(data);
+    router.push("/home/");
   };
 
   const onClickMarket = () => {
@@ -48,11 +47,11 @@ export default function LayoutNavigation(): JSX.Element {
     router.push("/market/new");
   };
 
+  const [getTodayItem, setGetTodayItem] = useState();
   useEffect(() => {
-    let getTodayItem = JSON.parse(localStorage.getItem("data"));
-    getTodayItem === null
-      ? localStorage.setItem("data", JSON.stringify([]))
-      : null;
+    if (typeof window !== "undefined") {
+      setGetTodayItem(JSON.parse(localStorage.getItem("data")));
+    }
   }, []);
 
   return (
@@ -66,7 +65,8 @@ export default function LayoutNavigation(): JSX.Element {
       </S.MenuBox>
       <S.TodayItemBox>
         <S.TodayItem>
-          {process.browser ? getTodayItem : <></>}
+          {getTodayItem ? <div>데이터 있음</div> : <div>데이터 없음</div>}
+
           <S.TodayItemImage />
         </S.TodayItem>
       </S.TodayItemBox>

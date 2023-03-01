@@ -1,7 +1,6 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { BsHeart, BsHeartFill } from "react-icons/Bs";
 import { useGetKakaoMap } from "../../../../../hooks/custom/useGetKakaoMap";
 import * as S from "./market.detail.style";
 import Slider from "react-slick";
@@ -61,40 +60,36 @@ export const TOGGLE_USED_ITEM_PICK = gql`
 `;
 
 export default function MarketDetailIndex() {
-  const { kakaomap } = useGetKakaoMap();
   const router = useRouter();
-  const [OnAddress, setOnAddress] = useState(0);
   const [deleteUseditem] = useMutation(DELETE_USED_ITEM);
   const [toggleUseditemPick] = useMutation(TOGGLE_USED_ITEM_PICK);
   const [createBuying] = useMutation(
     CREATE_POINT_TRANSACTION_OF_BUYING_AND_SELLING
   );
-  const [lat, setLat] = useState(0);
-  const [lng, setLng] = useState(0);
-
-  const [isWish, setIsWish] = useState(false);
 
   const { data, refetch } = useQuery(FETCH_USED_ITEM, {
     variables: { useditemId: router.query.itemId },
   });
+
+  const { kakaomap } = useGetKakaoMap(
+    data?.fetchUseditem?.useditemAddress?.address
+  );
 
   const onClickListBtn = () => {
     router.push("/market/list");
   };
 
   useEffect(() => {
-    let getTodayItem = localStorage.getItem("data");
-
-    if (getTodayItem === null) {
-      getTodayItem = [];
-    } else {
-      getTodayItem = JSON.parse(getTodayItem);
-    }
-
-    getTodayItem.push(router.query.itemId);
-    getTodayItem = new Set(getTodayItem);
-    getTodayItem = [...getTodayItem];
-    localStorage.setItem("data", JSON.stringify(getTodayItem));
+    // let getTodayItem = localStorage.getItem("data");
+    // if (getTodayItem === null) {
+    //   getTodayItem = [];
+    // } else {
+    //   getTodayItem = JSON.parse(getTodayItem);
+    // }
+    // getTodayItem.push(data);
+    // getTodayItem = new Set(getTodayItem);
+    // getTodayItem = [...getTodayItem];
+    // localStorage.setItem("data", JSON.stringify(getTodayItem));
   });
 
   const onClickEditBtn = () => {
@@ -143,7 +138,6 @@ export default function MarketDetailIndex() {
           },
         ],
       });
-      setIsWish(true);
       alert("장바구니에 담겼습니다");
     } catch {
       alert("에러입니당");
@@ -194,7 +188,7 @@ export default function MarketDetailIndex() {
           </S.PriceBox>
           <Slider {...settings}>
             {data?.fetchUseditem.images
-              ?.filter((el) => el)
+              ?.filter((el: any) => el)
               .map((el) => (
                 <>
                   <S.ImageBox key={el}>

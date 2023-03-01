@@ -9,6 +9,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-bottom: 25px;
 `;
 
 export const BoardWrapper = styled.div`

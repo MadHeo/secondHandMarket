@@ -4,7 +4,7 @@ declare const window: typeof globalThis & {
   kakao: any;
 };
 
-export const useGetKakaoMap = () => {
+export const useGetKakaoMap = (address: string) => {
   // const { data } = useQueryFetchUseditem({ useditemId: id });
   // console.log(data.fetchUseditem);
 
@@ -29,34 +29,31 @@ export const useGetKakaoMap = () => {
           var geocoder = new window.kakao.maps.services.Geocoder();
 
           // 주소로 좌표를 검색합니다
-          geocoder.addressSearch(
-            `경북 울릉군 울릉읍 독도리 30-3`,
-            function (result, status) {
-              // 정상적으로 검색이 완료됐으면
-              if (status === window.kakao.maps.services.Status.OK) {
-                var coords = new window.kakao.maps.LatLng(
-                  result[0].y,
-                  result[0].x
-                );
+          geocoder.addressSearch(`${address}}`, function (result, status) {
+            // 정상적으로 검색이 완료됐으면
+            if (status === window.kakao.maps.services.Status.OK) {
+              var coords = new window.kakao.maps.LatLng(
+                result[0].y,
+                result[0].x
+              );
 
-                // 결과값으로 받은 위치를 마커로 표시합니다
-                var marker = new window.kakao.maps.Marker({
-                  map: map,
-                  position: coords,
-                });
+              // 결과값으로 받은 위치를 마커로 표시합니다
+              var marker = new window.kakao.maps.Marker({
+                map: map,
+                position: coords,
+              });
 
-                // 인포윈도우로 장소에 대한 설명을 표시합니다
-                var infowindow = new window.kakao.maps.InfoWindow({
-                  content:
-                    '<div style="width:150px;text-align:center;padding:6px 0;">거래 위치</div>',
-                });
-                infowindow.open(map, marker);
+              // 인포윈도우로 장소에 대한 설명을 표시합니다
+              var infowindow = new window.kakao.maps.InfoWindow({
+                content:
+                  '<div style="width:150px;text-align:center;padding:6px 0;">거래 위치</div>',
+              });
+              infowindow.open(map, marker);
 
-                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-                map.setCenter(coords);
-              }
+              // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+              map.setCenter(coords);
             }
-          );
+          });
           //       // 마커가 표시될 위치입니다
           //       const markerPosition = new window.kakao.maps.LatLng(
           //         2131.123,

@@ -31,16 +31,13 @@ export default function LayoutAside(): JSX.Element {
   const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
   const [logout] = useMutation(LOGOUT_USER);
 
-  const onClickLogin = () => {
-    router.push("/login");
-  };
-
   const onClickSignUp = () => {
     router.push("/signup");
   };
 
   const onClickLogout = async () => {
     await logout();
+    window.location.reload();
   };
 
   const onClickCharge = async () => {
