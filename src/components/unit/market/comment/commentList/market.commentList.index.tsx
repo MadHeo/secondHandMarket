@@ -1,10 +1,6 @@
 import { useMutation, useQuery } from "@apollo/client";
-
-import { ChangeEvent, ChangeEventHandler, useState, MouseEvent } from "react";
-
+import { useState, MouseEvent } from "react";
 import { useRouter } from "next/router";
-import { Button, Modal } from "antd";
-
 import { gql } from "@apollo/client";
 import * as S from "./market.commentList.style";
 import InfiniteScroll from "react-infinite-scroller";
@@ -23,26 +19,40 @@ export const FETCH_USED_ITEM_QUESTIONS = gql`
   }
 `;
 
-export const DELETE_BOARD_COMMENT = gql`
-  mutation deleteBoardComment($password: String, $boardCommentId: ID!) {
-    deleteBoardComment(password: $password, boardCommentId: $boardCommentId)
+export const DELETE_USED_ITEM_QUESTION = gql`
+  mutation deleteUseditemQuestion($useditemQuestionId: ID!) {
+    deleteUseditemQuestion(useditemQuestionId: $useditemQuestionId)
   }
 `;
 
-export const UPDATE_BOARD_COMMENT = gql`
-  mutation updateBoardComment(
-    $updateBoardCommentInput: UpdateBoardCommentInput!
-    $password: String
-    $boardCommentId: ID!
+export const UPDATE_USED_ITEM_QUESTION = gql`
+  mutation updateUseditemQuestion(
+    $updateUseditemQuestionInput: UpdateUseditemQuestionInput!
+    $useditemQuestionId: ID!
   ) {
-    updateBoardComment(
-      updateBoardCommentInput: $updateBoardCommentInput
-      password: $password
-      boardCommentId: $boardCommentId
+    updateUseditemQuestion(
+      updateUseditemQuestionInput: $updateUseditemQuestionInput
+      useditemQuestionId: $useditemQuestionId
     ) {
       _id
-      writer
       contents
+      createdAt
+    }
+  }
+`;
+
+export const CREATE_USED_ITEM_QUESTION_ANSWER = gql`
+  mutation createUseditemQuestionAnswer(
+    $createUseditemQuestionAnswerInput: CreateUseditemQuestionAnswerInput!
+    $useditemQuestionId: ID!
+  ) {
+    createUseditemQuestion(
+      createUseditemQuestionAnswerInput: $createUseditemQuestionAnswerInput
+      useditemQuestionId: $useditemQuestionId
+    ) {
+      _id
+      contents
+      createdAt
     }
   }
 `;
@@ -65,16 +75,16 @@ export const FETCH_USED_ITEM_QUESTIONS_ANSWER = gql`
 
 export default function MarketCommentListIndex() {
   const router = useRouter();
-  const [deleteBoardComment] = useMutation(DELETE_BOARD_COMMENT);
-  const [updateBoardComment] = useMutation(UPDATE_BOARD_COMMENT);
-  const [password, setPassword] = useState("");
-  const [commentId, setCommentId] = useState();
+  const [createUseditemQuestionAnswer] = useMutation(
+    CREATE_USED_ITEM_QUESTION_ANSWER
+  );
+  const [fetchUseditemQuestionAnswers] = useMutation(DELETE_USED_ITEM_QUESTION);
+  const [updateUseditemQuestion] = useMutation(UPDATE_USED_ITEM_QUESTION);
   const [contents, setContents] = useState("");
-  const [rating, setRating] = useState(0);
-  const [UpContents, setUpContents] = useState("");
-  const [UpRating, setUpRating] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
+  const [useditemQuestionId, setUseditemQuestionId] = useState("");
+  const [questionContents, setQuestionContents] = useState("");
   const [MyIdx, setMyIdx] = useState(-1);
+  const [onQuestion, setOnQuestion] = useState(false);
   const { data, fetchMore } = useQuery(FETCH_USED_ITEM_QUESTIONS, {
     variables: {
       useditemId: router.query.itemId,
@@ -111,23 +121,13 @@ export default function MarketCommentListIndex() {
     });
   };
 
-  const handleOk = (): void => {
-    setIsOpen(false);
-  };
-
-  const handleCancel = (): void => {
-    setIsOpen(false);
-  };
-
   const onClickDeleteBtn = async (
     event: MouseEvent<HTMLButtonElement>
   ): Promise<void> => {
-    const pw = prompt("비밀번호를 입력해주세요");
     try {
-      await deleteBoardComment({
+      await fetchUseditemQuestionAnswers({
         variables: {
-          boardCommentId: event.currentTarget.id,
-          password: pw,
+          useditemQuestionId: event.currentTarget.id,
         },
         refetchQueries: [
           {
@@ -139,34 +139,25 @@ export default function MarketCommentListIndex() {
         ],
       });
     } catch {
-      Modal.error({
-        title: "에러",
-        content: "비밀번호를 확인해 주세요",
-      });
+      alert("삭제 실패!");
     }
   };
 
   const onClickEditComplete = async (
     event: MouseEvent<HTMLButtonElement>
   ): Promise<void> => {
-    // const updateBoardCommentInput = {};
-    // if (UpRating) updateBoardCommentInput.rating = UpRating;
-    // if (UpContents) updateBoardCommentInput.contents = UpContents;
-    await updateBoardComment({
+    await updateUseditemQuestion({
       variables: {
-        boardCommentId: event.currentTarget.id,
-        password: password,
-        // updateBoardCommentInput: updateBoardCommentInput,
-        updateBoardCommentInput: {
+        useditemQuestionId: event.currentTarget.id,
+        updateUseditemQuestionInput: {
           contents: contents,
-          rating: rating,
         },
       },
       refetchQueries: [
         {
-          query: FETCH_BOARD_COMMENTS,
+          query: FETCH_USED_ITEM_QUESTIONS,
           variables: {
-            boardId: router.query.boardNumber,
+            useditemId: router.query.itemId,
           },
         },
       ],
@@ -174,16 +165,41 @@ export default function MarketCommentListIndex() {
     setMyIdx(-1);
   };
 
-  const onChangeContents = (event: ChangeEvent<HTMLTextAreaElement>) => {
+  const onClickQuestionWrite = async (
+    event: MouseEvent<HTMLButtonElement>
+  ): Promise<void> => {
+    try {
+      if (contents) {
+        await createUseditemQuestionAnswer({
+          variables: {
+            useditemQuestionId,
+            createUseditemQuestionAnswerInput: {
+              contents: questionContents,
+            },
+          },
+          // refetchQueries: [
+          //   {
+          //     query: FETCH_USED_ITEM_QUESTIONS,
+          //     variables: {
+          //       useditemId: router.query.itemId,
+          //     },
+          //   },
+          // ],
+        });
+      } else {
+        alert("댓글을 작성해 주세요~!!@!@");
+      }
+    } catch {
+      alert("작성 실패!");
+    }
+  };
+
+  const onChangeContents = (event) => {
     setContents(event.currentTarget.value);
   };
 
-  const onChangePassword = (event: ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.currentTarget.value);
-  };
-
-  const onChangeRating = (event: number) => {
-    setRating(event);
+  const onChangeQuestionContents = (event) => {
+    setQuestionContents(event.currentTarget.value);
   };
 
   const onClickEditBtn = (event: any): void => {
@@ -192,6 +208,15 @@ export default function MarketCommentListIndex() {
 
   const onClickEditCancel = (event: any) => {
     setMyIdx(event.currentTarget.id);
+  };
+
+  const onClickQuestion = (event) => {
+    setOnQuestion(true);
+    setUseditemQuestionId(event.currentTarget.id);
+  };
+
+  const onClickQuestionCancel = () => {
+    setOnQuestion(false);
   };
 
   return (
@@ -214,22 +239,64 @@ export default function MarketCommentListIndex() {
                     </S.TopBox>
                     <S.BottomBox>
                       <S.ContentsBox>{el.contents}</S.ContentsBox>
+                      <S.QuestionButton id={el._id} onClick={onClickQuestion}>
+                        댓글 달기
+                      </S.QuestionButton>
+                      <S.ButtonBox>
+                        <S.EditButton id={el._id} onClick={onClickEditBtn}>
+                          수정
+                        </S.EditButton>
+                        <S.DeleteButton id={el._id} onClick={onClickDeleteBtn}>
+                          삭제
+                        </S.DeleteButton>
+                      </S.ButtonBox>
                     </S.BottomBox>
-                    {/* <S.CommentHandleBox>
-                  <S.ChangeButton
-                    id={el._id}
-                    onClick={onClickEditBtn}
-                  ></S.ChangeButton>
-                  <S.DeleteButton
-                    id={el._id}
-                    onClick={onClickDeleteBtn}
-                  ></S.DeleteButton>
-                </S.CommentHandleBox> */}
                   </S.CommentBox>
+                  {onQuestion ? (
+                    <S.QuestionSubBox>
+                      <S.QuestionBox>
+                        <S.QuestionTopBox>대댓글 입력창</S.QuestionTopBox>
+                        <S.QuestionBottomBox>
+                          <S.QuestionInputBox
+                            id={el._id}
+                            onChange={onChangeQuestionContents}
+                          ></S.QuestionInputBox>
+                          <S.QuestionWriteButton onClick={onClickQuestionWrite}>
+                            완료
+                          </S.QuestionWriteButton>
+                          <S.QuestionCancelButton
+                            onClick={onClickQuestionCancel}
+                          >
+                            취소
+                          </S.QuestionCancelButton>
+                        </S.QuestionBottomBox>
+                      </S.QuestionBox>
+                    </S.QuestionSubBox>
+                  ) : (
+                    <></>
+                  )}
                   <MarketCommentAnswerListIndex commentId={el._id} />
                 </S.AllCommentsBox>
               ) : (
-                <div></div>
+                <>
+                  <S.EditCommentBox>
+                    <S.EditCommentTopBox>댓글 수정 ✏️</S.EditCommentTopBox>
+                    <S.EditCommentBottomBox>
+                      <S.EditCommentInputBox
+                        onChange={onChangeContents}
+                      ></S.EditCommentInputBox>
+                      <S.EditCommentWriteButton
+                        id={el._id}
+                        onClick={onClickEditComplete}
+                      >
+                        수정 완료
+                      </S.EditCommentWriteButton>
+                      <S.EditCommentCancelButton onClick={onClickEditCancel}>
+                        취소
+                      </S.EditCommentCancelButton>
+                    </S.EditCommentBottomBox>
+                  </S.EditCommentBox>
+                </>
               )
             )}
           </InfiniteScroll>

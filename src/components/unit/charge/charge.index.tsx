@@ -55,6 +55,7 @@ export default function ChargeIndex(): JSX.Element {
             },
           });
           router.push("/home");
+          setTimeout(() => window.location.reload(), 500);
           //   setImp(rsp.imp_uid);
           //   setPoint(rsp.paid_amount);
         } else {
@@ -82,8 +83,8 @@ export default function ChargeIndex(): JSX.Element {
               <option value={0}>충전 포인트 선택 🪬</option>
               <option value={10000}>10,000원 🪙</option>
               <option value={20000}>20,000원 💰</option>
-              <option value={30000}>50,000원 💸</option>
-              <option value={100000}>100,000원 💎</option>
+              <option value={50000}>50,000원 💸</option>
+              <option value={1000000}>1,000,000원 💎</option>
             </S.Select>
             <S.ChargeButton onClick={onClickPayment}>충전하기</S.ChargeButton>
           </S.InputBox>

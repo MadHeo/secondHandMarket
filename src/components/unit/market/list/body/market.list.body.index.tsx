@@ -2,11 +2,47 @@ import { useEffect, useState } from "react";
 import { useQueryFetchUseditems } from "../../../../../hooks/api/query/useQueryFetchUseditems";
 import { useMoveToPage } from "../../../../../hooks/custom/useMoveToPage";
 import * as S from "./market.list.body.style";
+import { v4 as uuidv4 } from "uuid";
+import { useRouter } from "next/router";
+import { gql, useQuery } from "@apollo/client";
+
+export const FETCH_USED_ITEM = gql`
+  query fetchUseditem($useditemId: ID!) {
+    fetchUseditem(useditemId: $useditemId) {
+      _id
+      name
+      remarks
+      contents
+      price
+      createdAt
+      images
+      tags
+      pickedCount
+      seller {
+        _id
+        email
+        name
+      }
+      useditemAddress {
+        _id
+        address
+        addressDetail
+        lat
+        lng
+      }
+    }
+  }
+`;
 
 export default function MarketListBody(props): JSX.Element {
+  const router = useRouter();
   const { data, refetch, fetchMore } = useQueryFetchUseditems();
   const { onClickMoveToPage } = useMoveToPage();
   const [position, setPosition] = useState(0);
+
+  const { data: usedItemData } = useQuery(FETCH_USED_ITEM, {
+    variables: { useditemId: router.query.itemId },
+  });
 
   useEffect(() => {
     window.addEventListener("scroll", (Scroll) => {});
@@ -57,9 +93,9 @@ export default function MarketListBody(props): JSX.Element {
             hasMore={true}
             useWindow={false}
           >
-            {props.data?.fetchUseditems.map((el) => (
+            {props.data?.fetchUseditems.map((el, idx) => (
               <S.ProductCard
-                key={el._id}
+                key={uuidv4()}
                 onClick={onClickMoveToPage(`/market/${el._id}`)}
               >
                 <S.ProductCardImageBox>

@@ -56,7 +56,7 @@ export const TodayItemBox = styled.div`
   height: 530px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   position: absolute;
   bottom: 90px;
@@ -64,6 +64,7 @@ export const TodayItemBox = styled.div`
   background-image: url("/image/img_todayItem.png");
   overflow: auto;
   z-index: 2;
+  padding-top: 60px;
 `;
 
 export const TodayItem = styled.div`
@@ -84,17 +85,17 @@ export const TodayItemImage = styled.img`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 30px;
   border: 5px solid black;
+  background-color: white;
 `;
 
 export const TodayItemInfo = styled.div`
   width: 215px;
-  height: 44px;
+  height: 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-bottom: 30px;
-  border: 5px solid black;
+  background-color: black;
+  color: white;
 `;

@@ -31,12 +31,10 @@ export const FETCH_USED_ITEM = gql`
 
 export default function LayoutNavigation(): JSX.Element {
   const router = useRouter();
-  const { data, refetch } = useQuery(FETCH_USED_ITEM, {
-    variables: { useditemId: router.query.itemId },
-  });
 
   const onClickLogo = () => {
     router.push("/home/");
+    setTimeout(() => window.location.reload(), 500);
   };
 
   const onClickMarket = () => {
@@ -44,13 +42,19 @@ export default function LayoutNavigation(): JSX.Element {
   };
 
   const onClickNewItem = () => {
-    router.push("/market/new");
+    // router.push("/market/new");
   };
 
   const [getTodayItem, setGetTodayItem] = useState();
+
   useEffect(() => {
     if (typeof window !== "undefined") {
-      setGetTodayItem(JSON.parse(localStorage.getItem("data")));
+      const getTodyItem = () => {
+        let localData = JSON.parse(localStorage.getItem("data"));
+        setGetTodayItem(localData);
+      };
+
+      getTodyItem();
     }
   }, []);
 
@@ -64,11 +68,19 @@ export default function LayoutNavigation(): JSX.Element {
         <S.MenuButton onClick={onClickNewItem}>상품 등록</S.MenuButton>
       </S.MenuBox>
       <S.TodayItemBox>
-        <S.TodayItem>
-          {getTodayItem ? <div>데이터 있음</div> : <div>데이터 없음</div>}
+        {getTodayItem?.map((el, idx) => (
+          <S.TodayItem key={idx}>
+            <S.TodayItemInfo>{el?.name}</S.TodayItemInfo>
 
-          <S.TodayItemImage />
-        </S.TodayItem>
+            {el?.images[0] ? (
+              <S.TodayItemImage
+                src={`https://storage.googleapis.com/${el?.images[0]}`}
+              />
+            ) : (
+              <S.TodayItemImage src={`/image/img_empty1.png`} />
+            )}
+          </S.TodayItem>
+        ))}
       </S.TodayItemBox>
     </S.MainBox>
   );

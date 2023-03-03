@@ -60,11 +60,8 @@ export const MarketCommentAnswerListIndex = (props) => {
     IMutationUpdateBoardCommentArgs
   >(UPDATE_BOARD_COMMENT);
   const [password, setPassword] = useState("");
-  const [commentId, setCommentId] = useState();
   const [contents, setContents] = useState("");
   const [rating, setRating] = useState(0);
-  const [UpContents, setUpContents] = useState("");
-  const [UpRating, setUpRating] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
   const [MyIdx, setMyIdx] = useState(-1);
 
@@ -198,17 +195,11 @@ export const MarketCommentAnswerListIndex = (props) => {
                   </S.TopBox>
                   <S.BottomBox>
                     <S.ContentsBox>{el.contents}</S.ContentsBox>
+                    <S.ButtonBox>
+                      <S.EditButton>수정</S.EditButton>
+                      <S.DeleteButton>삭제</S.DeleteButton>
+                    </S.ButtonBox>
                   </S.BottomBox>
-                  {/* <S.CommentHandleBox>
-                  <S.ChangeButton
-                    id={el._id}
-                    onClick={onClickEditBtn}
-                  ></S.ChangeButton>
-                  <S.DeleteButton
-                    id={el._id}
-                    onClick={onClickDeleteBtn}
-                  ></S.DeleteButton>
-                </S.CommentHandleBox> */}
                 </S.CommentBox>
               </S.CommentAnswerBox>
             ) : (

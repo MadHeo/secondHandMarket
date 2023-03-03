@@ -86,7 +86,7 @@ export const BottomBox = styled.div`
 `;
 
 export const ContentsBox = styled.div`
-  width: 845px;
+  width: 700px;
   height: 100%;
   display: flex;
   flex-direction: row;
@@ -96,31 +96,51 @@ export const ContentsBox = styled.div`
   padding: 0px 25px;
 `;
 
-export const ButtonBox = styled.div`
-  width: 845px;
+export const ButtonBox = styled.button`
+  width: 110px;
   height: 100%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   font-size: 20px;
   background-color: white;
-  padding: 0px 25px;
   color: #7b7b7b;
 `;
 
-export const WriteButton = styled.button`
-  width: 114px;
+export const EditButton = styled.button`
+  width: 55px;
   height: 100%;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  background-color: #d9d9d9;
+  background-color: #32a6ff;
   font-size: 20px;
-  border-left: 6px solid black;
   cursor: pointer;
+  color: white;
+  border: 0px;
+  border-left: 5px solid black;
 
   :active {
-    background-color: #a7a7a7;
+    background-color: #818181;
+  }
+`;
+
+export const DeleteButton = styled.button`
+  width: 55px;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: #ff5b5b;
+  font-size: 20px;
+  cursor: pointer;
+  color: white;
+  border: 0px;
+  border-left: 5px solid black;
+
+  :active {
+    background-color: #818181;
   }
 `;

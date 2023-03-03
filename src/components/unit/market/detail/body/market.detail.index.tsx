@@ -6,6 +6,7 @@ import * as S from "./market.detail.style";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { IUseditem } from "../../../../../commons/types/generated/types";
 
 export const CREATE_POINT_TRANSACTION_OF_BUYING_AND_SELLING = gql`
   mutation createPointTransactionOfBuyingAndSelling($useritemId: ID!) {
@@ -80,16 +81,17 @@ export default function MarketDetailIndex() {
   };
 
   useEffect(() => {
-    // let getTodayItem = localStorage.getItem("data");
-    // if (getTodayItem === null) {
-    //   getTodayItem = [];
-    // } else {
-    //   getTodayItem = JSON.parse(getTodayItem);
-    // }
-    // getTodayItem.push(data);
-    // getTodayItem = new Set(getTodayItem);
-    // getTodayItem = [...getTodayItem];
-    // localStorage.setItem("data", JSON.stringify(getTodayItem));
+    let getTodayItem: any = localStorage.getItem("data");
+    if (getTodayItem === null) {
+      getTodayItem = [];
+    } else {
+      getTodayItem = JSON.parse(getTodayItem);
+    }
+    getTodayItem.unshift(data?.fetchUseditem);
+    getTodayItem = new Set(getTodayItem);
+    getTodayItem = [...getTodayItem];
+
+    localStorage.setItem("data", JSON.stringify(getTodayItem));
   });
 
   const onClickEditBtn = () => {

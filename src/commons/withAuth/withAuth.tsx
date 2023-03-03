@@ -8,10 +8,12 @@ export const withAuth = (Component: any) => (props: any) => {
   const [accessToken] = useRecoilState(accessTokenState);
 
   useEffect(() => {
-    if (!accessToken) {
-      alert("로그인 후 이용 가능합니다 😢");
-      void router.push("/login");
-    }
+    // if (!accessToken) {
+    //   alert("로그인 후 이용 가능합니다 😢");
+    //   void router.push("/login");
+    // } else {
+    //   console.log(accessToken);
+    // }
   }, []);
 
   return <Component {...props} />;

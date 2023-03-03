@@ -20,15 +20,6 @@ export const BackgroundImageBox = styled.div`
   }
 `;
 
-const SectionBox = styled.div`
-  width: 1120px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: white;
-  position: relative;
-`;
-
 export const CircleBox = styled.div`
   width: 243px;
   height: 243px;

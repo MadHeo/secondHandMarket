@@ -38,6 +38,7 @@ export default function LayoutAside(): JSX.Element {
   const onClickLogout = async () => {
     await logout();
     window.location.reload();
+    router.push("/login");
   };
 
   const onClickCharge = async () => {

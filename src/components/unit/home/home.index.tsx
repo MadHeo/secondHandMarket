@@ -28,8 +28,8 @@ export default function HomePageIndex(): JSX.Element {
             style={{ transform: `rotate(${position / 8}deg)` }}
           />
         </S.CircleBox>
-        {homeImg.map((e) => (
-          <S.BackgroundImageBox>
+        {homeImg.map((e, i) => (
+          <S.BackgroundImageBox key={i}>
             <img src={`/image/home${e}.jpeg/`} />
           </S.BackgroundImageBox>
         ))}
