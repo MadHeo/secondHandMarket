@@ -287,7 +287,6 @@ export const QuestionInputBox = styled.input`
   font-size: 20px;
   background-color: white;
   padding: 0px 25px;
-  color: #7b7b7b;
 `;
 
 export const QuestionWriteButton = styled.button`

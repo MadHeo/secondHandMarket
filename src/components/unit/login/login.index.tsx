@@ -41,7 +41,7 @@ export default function LoginIndex(): JSX.Element {
       }
       setAccessToken(accessToken);
 
-      router.push("/home");
+      router.push("/market/list");
     } catch (error) {
       if (error instanceof Error) alert(error.message);
     }

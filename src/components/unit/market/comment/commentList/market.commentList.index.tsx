@@ -46,13 +46,11 @@ export const CREATE_USED_ITEM_QUESTION_ANSWER = gql`
     $createUseditemQuestionAnswerInput: CreateUseditemQuestionAnswerInput!
     $useditemQuestionId: ID!
   ) {
-    createUseditemQuestion(
+    createUseditemQuestionAnswer(
       createUseditemQuestionAnswerInput: $createUseditemQuestionAnswerInput
       useditemQuestionId: $useditemQuestionId
     ) {
       _id
-      contents
-      createdAt
     }
   }
 `;
@@ -65,10 +63,6 @@ export const FETCH_USED_ITEM_QUESTIONS_ANSWER = gql`
     ) {
       _id
       contents
-      user {
-        name
-      }
-      createdAt
     }
   }
 `;
@@ -165,30 +159,28 @@ export default function MarketCommentListIndex() {
     setMyIdx(-1);
   };
 
-  const onClickQuestionWrite = async (
+  const onClickQuestionAnswerWrite = async (
     event: MouseEvent<HTMLButtonElement>
   ): Promise<void> => {
     try {
-      if (contents) {
-        await createUseditemQuestionAnswer({
-          variables: {
-            useditemQuestionId,
-            createUseditemQuestionAnswerInput: {
-              contents: questionContents,
-            },
+      await createUseditemQuestionAnswer({
+        variables: {
+          useditemQuestionId: useditemQuestionId,
+          createUseditemQuestionAnswerInput: {
+            contents: questionContents,
           },
-          // refetchQueries: [
-          //   {
-          //     query: FETCH_USED_ITEM_QUESTIONS,
-          //     variables: {
-          //       useditemId: router.query.itemId,
-          //     },
-          //   },
-          // ],
-        });
-      } else {
-        alert("댓글을 작성해 주세요~!!@!@");
-      }
+        },
+        update(cache, { data }) {
+          cache.modify({
+            fields: {
+              fetchUseditemQuestionAnswers: (prev) => {
+                return [data.createUseditemQuestionAnswer, ...prev];
+              },
+            },
+          });
+        },
+      });
+      setOnQuestion(false);
     } catch {
       alert("작성 실패!");
     }
@@ -261,7 +253,9 @@ export default function MarketCommentListIndex() {
                             id={el._id}
                             onChange={onChangeQuestionContents}
                           ></S.QuestionInputBox>
-                          <S.QuestionWriteButton onClick={onClickQuestionWrite}>
+                          <S.QuestionWriteButton
+                            onClick={onClickQuestionAnswerWrite}
+                          >
                             완료
                           </S.QuestionWriteButton>
                           <S.QuestionCancelButton

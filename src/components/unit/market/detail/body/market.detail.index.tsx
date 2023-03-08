@@ -1,12 +1,17 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { useGetKakaoMap } from "../../../../../hooks/custom/useGetKakaoMap";
+import {
+  UseGetKakaoMap,
+  useGetKakaoMap,
+} from "../../../../../hooks/custom/useGetKakaoMap";
 import * as S from "./market.detail.style";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { IUseditem } from "../../../../../commons/types/generated/types";
+import { useAuth } from "../../../../../hooks/custom/useAuth";
+import DOMPurify from "dompurify";
 
 export const CREATE_POINT_TRANSACTION_OF_BUYING_AND_SELLING = gql`
   mutation createPointTransactionOfBuyingAndSelling($useritemId: ID!) {
@@ -68,13 +73,11 @@ export default function MarketDetailIndex() {
     CREATE_POINT_TRANSACTION_OF_BUYING_AND_SELLING
   );
 
+  useAuth();
+
   const { data, refetch } = useQuery(FETCH_USED_ITEM, {
     variables: { useditemId: router.query.itemId },
   });
-
-  const { kakaomap } = useGetKakaoMap(
-    data?.fetchUseditem?.useditemAddress?.address
-  );
 
   const onClickListBtn = () => {
     router.push("/market/list");
@@ -146,8 +149,6 @@ export default function MarketDetailIndex() {
     }
   };
 
-  kakaomap();
-
   let settings = {
     dots: true,
     infinite: true,
@@ -205,12 +206,22 @@ export default function MarketDetailIndex() {
             {data ? data?.fetchUseditem?.remarks : "...loading"}
           </S.RemarkBox>
           <S.ContentBox>
-            {data ? data?.fetchUseditem?.contents : "...loading"}
+            {data ? (
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: DOMPurify.sanitize(data?.fetchUseditem?.contents),
+                }}
+              />
+            ) : (
+              "...loading"
+            )}
           </S.ContentBox>
           <S.MapBox>
             <S.MapText>거래 위치 확인해주세요!</S.MapText>
             <S.MapContents>
-              <div id="map" style={{ width: "605px", height: "280px" }}></div>
+              <UseGetKakaoMap
+                address={data?.fetchUseditem?.useditemAddress.address}
+              />
             </S.MapContents>
           </S.MapBox>
           <S.ButtonBox>

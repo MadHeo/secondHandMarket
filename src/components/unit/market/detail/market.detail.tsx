@@ -11,7 +11,7 @@ const MaimBox = styled.div`
   overflow: auto;
 `;
 
-function MarketDetailPage() {
+export default function MarketDetailPage() {
   return (
     <>
       <MaimBox>
@@ -23,4 +23,4 @@ function MarketDetailPage() {
   );
 }
 
-export default withAuth(MarketDetailPage);
+// withAuth(MarketDetailPage);

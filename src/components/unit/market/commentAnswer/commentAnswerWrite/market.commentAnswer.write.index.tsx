@@ -72,15 +72,17 @@ export default function MarketCommentAnswerWriteIndex(): JSX.Element {
           ],
         });
       } else {
-        alert("댓글을 작성해 주세요~!!@!@");
+        alert("댓글을 작성에 실패했습니다!!@!@");
       }
     } catch {
       alert("작성 실패!");
     }
   };
 
-  const OnChangeContents = (event: ChangeEvent<HTMLInputElement>) =>
+  const OnChangeContents = (event: ChangeEvent<HTMLInputElement>) => {
     setContents(event.target.value);
+    console.log(event.target.value);
+  };
 
   return (
     <S.MainBox>

@@ -28,9 +28,11 @@ export const FETCH_USED_ITEM_QUESTIONS_ANSWER = gql`
   }
 `;
 
-export const DELETE_BOARD_COMMENT = gql`
-  mutation deleteBoardComment($password: String, $boardCommentId: ID!) {
-    deleteBoardComment(password: $password, boardCommentId: $boardCommentId)
+export const DELETE_USED_ITEM_QUESTION_ANSWER = gql`
+  mutation deleteUseditemQuestionAnswer($useditemQuestionAnswerId: ID!) {
+    deleteUseditemQuestionAnswer(
+      useditemQuestionAnswerId: $useditemQuestionAnswerId
+    )
   }
 `;
 
@@ -54,7 +56,9 @@ export const UPDATE_BOARD_COMMENT = gql`
 
 export const MarketCommentAnswerListIndex = (props) => {
   const router = useRouter();
-  const [deleteBoardComment] = useMutation(DELETE_BOARD_COMMENT);
+  const [deleteUseditemQuestionAnswer] = useMutation(
+    DELETE_USED_ITEM_QUESTION_ANSWER
+  );
   const [updateBoardComment] = useMutation<
     Pick<IMutation, "updateBoardComment">,
     IMutationUpdateBoardCommentArgs
@@ -106,28 +110,29 @@ export const MarketCommentAnswerListIndex = (props) => {
   const onClickDeleteBtn = async (
     event: MouseEvent<HTMLButtonElement>
   ): Promise<void> => {
-    // const pw = prompt("비밀번호를 입력해주세요");
-    // try {
-    //   await deleteBoardComment({
-    //     variables: {
-    //       boardCommentId: event.currentTarget.id,
-    //       password: pw,
-    //     },
-    //     refetchQueries: [
-    //       {
-    //         query: FETCH_USED_ITEM_QUESTIONS,
-    //         variables: {
-    //           useditemId: router.query.itemId,
-    //         },
-    //       },
-    //     ],
-    //   });
-    // } catch {
-    //   Modal.error({
-    //     title: "에러",
-    //     content: "비밀번호를 확인해 주세요",
-    //   });
-    // }
+    try {
+      await deleteUseditemQuestionAnswer({
+        variables: {
+          useditemQuestionAnswerId: event.currentTarget.id,
+        },
+        update(cache, { data }) {
+          cache.modify({
+            // 캐시에있는 어떤 필드를 수정할 것 인지 key-value 형태로 적어줍니다.
+            fields: {
+              fetchUseditemQuestionAnswers: (prev, { readField }) => {
+                const deletedId = data.deleteUseditemQuestionAnswer; // 삭제된ID
+                const filteredPrev = prev.filter(
+                  (el) => readField("_id", el) !== deletedId // el._id가 안되므로, readField를 사용해서 꺼내오기
+                );
+                return [...filteredPrev]; // 삭제된ID를 제외한 나머지 9개만 리턴
+              },
+            },
+          });
+        },
+      });
+    } catch {
+      alert("삭제 실패!");
+    }
   };
 
   const onClickEditComplete = async (
@@ -136,25 +141,25 @@ export const MarketCommentAnswerListIndex = (props) => {
     // const updateBoardCommentInput = {};
     // if (UpRating) updateBoardCommentInput.rating = UpRating;
     // if (UpContents) updateBoardCommentInput.contents = UpContents;
-    await updateBoardComment({
-      variables: {
-        boardCommentId: event.currentTarget.id,
-        password: password,
-        // updateBoardCommentInput: updateBoardCommentInput,
-        updateBoardCommentInput: {
-          contents: contents,
-          rating: rating,
-        },
-      },
-      refetchQueries: [
-        {
-          query: FETCH_BOARD_COMMENTS,
-          variables: {
-            boardId: router.query.boardNumber,
-          },
-        },
-      ],
-    });
+    // await updateBoardComment({
+    //   variables: {
+    //     boardCommentId: event.currentTarget.id,
+    //     password: password,
+    //     // updateBoardCommentInput: updateBoardCommentInput,
+    //     updateBoardCommentInput: {
+    //       contents: contents,
+    //       rating: rating,
+    //     },
+    //   },
+    //   refetchQueries: [
+    //     {
+    //       query: FETCH_BOARD_COMMENTS,
+    //       variables: {
+    //         boardId: router.query.boardNumber,
+    //       },
+    //     },
+    //   ],
+    // });
     setMyIdx(-1);
   };
 
@@ -197,7 +202,9 @@ export const MarketCommentAnswerListIndex = (props) => {
                     <S.ContentsBox>{el.contents}</S.ContentsBox>
                     <S.ButtonBox>
                       <S.EditButton>수정</S.EditButton>
-                      <S.DeleteButton>삭제</S.DeleteButton>
+                      <S.DeleteButton id={el._id} onClick={onClickDeleteBtn}>
+                        삭제
+                      </S.DeleteButton>
                     </S.ButtonBox>
                   </S.BottomBox>
                 </S.CommentBox>
