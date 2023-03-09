@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useQueryFetchUseditems } from "../../../../hooks/api/query/useQueryFetchUseditems";
+import { useQueryFetchUseditems } from "../../../../hooks/api/query/FetchUseditems";
 import { useSearchBar } from "../../../../hooks/custom/useSearchBar";
 import SearchBar from "../../../commons/serchBard/searchBar.index";
 import MarketListBody from "./body/market.list.body.index";

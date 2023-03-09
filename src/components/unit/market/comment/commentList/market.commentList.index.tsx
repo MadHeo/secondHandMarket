@@ -78,7 +78,7 @@ export default function MarketCommentListIndex() {
   const [useditemQuestionId, setUseditemQuestionId] = useState("");
   const [questionContents, setQuestionContents] = useState("");
   const [MyIdx, setMyIdx] = useState(-1);
-  const [onQuestion, setOnQuestion] = useState(false);
+  const [onQuestion, setOnQuestion] = useState(-1);
   const { data, fetchMore } = useQuery(FETCH_USED_ITEM_QUESTIONS, {
     variables: {
       useditemId: router.query.itemId,
@@ -180,7 +180,7 @@ export default function MarketCommentListIndex() {
           });
         },
       });
-      setOnQuestion(false);
+      setOnQuestion(-1);
     } catch {
       alert("작성 실패!");
     }
@@ -203,12 +203,12 @@ export default function MarketCommentListIndex() {
   };
 
   const onClickQuestion = (event) => {
-    setOnQuestion(true);
+    setOnQuestion(event.currentTarget.id);
     setUseditemQuestionId(event.currentTarget.id);
   };
 
   const onClickQuestionCancel = () => {
-    setOnQuestion(false);
+    setOnQuestion(-1);
   };
 
   return (
@@ -244,7 +244,7 @@ export default function MarketCommentListIndex() {
                       </S.ButtonBox>
                     </S.BottomBox>
                   </S.CommentBox>
-                  {onQuestion ? (
+                  {onQuestion === el._id ? (
                     <S.QuestionSubBox>
                       <S.QuestionBox>
                         <S.QuestionTopBox>대댓글 입력창</S.QuestionTopBox>

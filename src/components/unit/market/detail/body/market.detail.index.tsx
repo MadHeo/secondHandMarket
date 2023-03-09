@@ -1,10 +1,7 @@
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import {
-  UseGetKakaoMap,
-  useGetKakaoMap,
-} from "../../../../../hooks/custom/useGetKakaoMap";
+import { UseGetKakaoMap } from "../../../../../hooks/custom/useGetKakaoMap";
 import * as S from "./market.detail.style";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -143,7 +140,6 @@ export default function MarketDetailIndex() {
           },
         ],
       });
-      alert("장바구니에 담겼습니다");
     } catch {
       alert("에러입니당");
     }
@@ -242,7 +238,7 @@ export default function MarketDetailIndex() {
                 onClick={onClickWishBtn}
                 style={{ backgroundColor: "#F065B0" }}
               >
-                장바구니
+                찜하기
               </S.Button>
             </S.ButtonContent>
           </S.ButtonBox>

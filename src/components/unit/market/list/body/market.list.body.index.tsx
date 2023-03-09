@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useQueryFetchUseditems } from "../../../../../hooks/api/query/useQueryFetchUseditems";
+import { useQueryFetchUseditems } from "../../../../../hooks/api/query/FetchUseditems";
 import { useMoveToPage } from "../../../../../hooks/custom/useMoveToPage";
 import * as S from "./market.list.body.style";
 import { v4 as uuidv4 } from "uuid";

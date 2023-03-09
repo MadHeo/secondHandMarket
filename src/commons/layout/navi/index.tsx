@@ -42,7 +42,7 @@ export default function LayoutNavigation(): JSX.Element {
   };
 
   const onClickNewItem = () => {
-    // router.push("/market/new");
+    router.push("/market/new");
   };
 
   const [getTodayItem, setGetTodayItem] = useState();
