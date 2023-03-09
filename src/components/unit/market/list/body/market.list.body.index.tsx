@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
-import { useQueryFetchUseditems } from "../../../../../hooks/api/query/FetchUseditems";
+import {
+  FetchUseditems,
+  useQueryFetchUseditems,
+} from "../../../../../hooks/api/query/FetchUseditems";
 import { useMoveToPage } from "../../../../../hooks/custom/useMoveToPage";
 import * as S from "./market.list.body.style";
 import { v4 as uuidv4 } from "uuid";
@@ -36,7 +39,7 @@ export const FETCH_USED_ITEM = gql`
 
 export default function MarketListBody(props): JSX.Element {
   const router = useRouter();
-  const { data, refetch, fetchMore } = useQueryFetchUseditems();
+  const { data, refetch, fetchMore } = FetchUseditems();
   const { onClickMoveToPage } = useMoveToPage();
   const [position, setPosition] = useState(0);
 

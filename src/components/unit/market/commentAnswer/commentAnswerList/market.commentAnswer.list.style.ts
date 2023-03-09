@@ -96,8 +96,19 @@ export const ContentsBox = styled.div`
   padding: 0px 25px;
 `;
 
+export const ContentsInput = styled.input`
+  width: 700px;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  font-size: 20px;
+  padding: 0px 25px;
+  background-color: white;
+`;
+
 export const ButtonBox = styled.button`
-  width: 110px;
   height: 100%;
   display: flex;
   flex-direction: row;

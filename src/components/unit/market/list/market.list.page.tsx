@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { useQueryFetchUseditems } from "../../../../hooks/api/query/FetchUseditems";
+import { FetchUseditems } from "../../../../hooks/api/query/FetchUseditems";
 import { useSearchBar } from "../../../../hooks/custom/useSearchBar";
 import SearchBar from "../../../commons/serchBard/searchBar.index";
 import MarketListBody from "./body/market.list.body.index";
@@ -14,7 +14,7 @@ const MainBox = styled.div`
 `;
 
 export default function MarketListPage(): JSX.Element {
-  const { data, refetch, fetchMore } = useQueryFetchUseditems();
+  const { data, refetch, fetchMore } = FetchUseditems();
   const { onChangeSearch } = useSearchBar({
     refetch,
   });
