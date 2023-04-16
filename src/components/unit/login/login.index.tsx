@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useForm } from "react-hook-form";
 import { ChangeEvent, useMemo, useState } from "react";
 import { useMutation } from "@apollo/client";
 import {
@@ -13,19 +14,15 @@ import { useMutationLoginUser } from "../../../hooks/api/mutation/useMutationLog
 
 export default function LoginIndex(): JSX.Element {
   const router = useRouter();
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (values) => console.log(values);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [, setAccessToken] = useRecoilState(accessTokenState);
   const [loginUser] = useMutationLoginUser();
-
-  const onChangeEmail = (e: ChangeEvent<HTMLInputElement>): void => {
-    setEmail(e.currentTarget.value);
-  };
-
-  const onChangePassword = (e: ChangeEvent<HTMLInputElement>): void => {
-    setPassword(e.currentTarget.value);
-  };
 
   const onClickLogin = async (): Promise<void> => {
     try {
@@ -52,19 +49,34 @@ export default function LoginIndex(): JSX.Element {
       <S.MainBox>
         <S.SubBox>
           <S.LoginImage src="/image/img_login.png/" alt="" />
-          <S.InputBox>
-            <S.Input
-              type="email"
-              placeholder="이메일 계정"
-              onChange={onChangeEmail}
-            ></S.Input>
-            <S.Input
-              type="password"
-              placeholder="비밀번호"
-              onChange={onChangePassword}
-            ></S.Input>
-            <S.LoginButton onClick={onClickLogin}>로그인</S.LoginButton>
-          </S.InputBox>
+          <form onSubmit={handleSubmit(onClickLogin)}>
+            <S.InputBox>
+              <S.Input
+                type="email"
+                placeholder="이메일 계정"
+                {...register("email", {
+                  required: "Required",
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: "영문/숫자/특수문자가 포함되어야 합니다.",
+                  },
+                })}
+              ></S.Input>
+              <S.Input
+                type="password"
+                placeholder="비밀번호"
+                {...register("password", {
+                  required: "Required",
+                  pattern: {
+                    value:
+                      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{3,8}$/,
+                    message: "영문/숫자/특수문자가 포함되어야 합니다.",
+                  },
+                })}
+              ></S.Input>
+              <S.LoginButton>로그인</S.LoginButton>
+            </S.InputBox>
+          </form>
         </S.SubBox>
       </S.MainBox>
     </div>
