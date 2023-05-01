@@ -1,71 +1,17 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { useState, MouseEvent } from "react";
+import { useState, MouseEvent, ChangeEvent } from "react";
 import { useRouter } from "next/router";
 import { gql } from "@apollo/client";
 import * as S from "./market.commentList.style";
 import InfiniteScroll from "react-infinite-scroller";
 import { MarketCommentAnswerListIndex } from "../../commentAnswer/commentAnswerList/market.commentAnswer.list.index";
-
-export const FETCH_USED_ITEM_QUESTIONS = gql`
-  query fetchUseditemQuestions($page: Int, $useditemId: ID!) {
-    fetchUseditemQuestions(page: $page, useditemId: $useditemId) {
-      _id
-      contents
-      user {
-        name
-      }
-      createdAt
-    }
-  }
-`;
-
-export const DELETE_USED_ITEM_QUESTION = gql`
-  mutation deleteUseditemQuestion($useditemQuestionId: ID!) {
-    deleteUseditemQuestion(useditemQuestionId: $useditemQuestionId)
-  }
-`;
-
-export const UPDATE_USED_ITEM_QUESTION = gql`
-  mutation updateUseditemQuestion(
-    $updateUseditemQuestionInput: UpdateUseditemQuestionInput!
-    $useditemQuestionId: ID!
-  ) {
-    updateUseditemQuestion(
-      updateUseditemQuestionInput: $updateUseditemQuestionInput
-      useditemQuestionId: $useditemQuestionId
-    ) {
-      _id
-      contents
-      createdAt
-    }
-  }
-`;
-
-export const CREATE_USED_ITEM_QUESTION_ANSWER = gql`
-  mutation createUseditemQuestionAnswer(
-    $createUseditemQuestionAnswerInput: CreateUseditemQuestionAnswerInput!
-    $useditemQuestionId: ID!
-  ) {
-    createUseditemQuestionAnswer(
-      createUseditemQuestionAnswerInput: $createUseditemQuestionAnswerInput
-      useditemQuestionId: $useditemQuestionId
-    ) {
-      _id
-    }
-  }
-`;
-
-export const FETCH_USED_ITEM_QUESTIONS_ANSWER = gql`
-  query fetchUseditemQuestionAnswers($page: Int, $useditemQuestionId: ID!) {
-    fetchUseditemQuestionAnswers(
-      page: $page
-      useditemQuestionId: $useditemQuestionId
-    ) {
-      _id
-      contents
-    }
-  }
-`;
+import {
+  CREATE_USED_ITEM_QUESTION_ANSWER,
+  DELETE_USED_ITEM_QUESTION,
+  FETCH_USED_ITEM_QUESTIONS,
+  FETCH_USED_ITEM_QUESTIONS_ANSWER,
+  UPDATE_USED_ITEM_QUESTION,
+} from "./market.commentList.query";
 
 export default function MarketCommentListIndex() {
   const router = useRouter();
@@ -186,24 +132,24 @@ export default function MarketCommentListIndex() {
     }
   };
 
-  const onChangeContents = (event) => {
+  const onChangeContents = (event: ChangeEvent<HTMLInputElement>) => {
     setContents(event.currentTarget.value);
   };
 
-  const onChangeQuestionContents = (event) => {
+  const onChangeQuestionContents = (event: ChangeEvent<HTMLInputElement>) => {
     setQuestionContents(event.currentTarget.value);
   };
 
-  const onClickEditBtn = (event: any): void => {
-    setMyIdx(event.currentTarget.id);
+  const onClickEditBtn = (event: MouseEvent<HTMLButtonElement>): void => {
+    void setMyIdx(Number(event.currentTarget.id));
   };
 
-  const onClickEditCancel = (event: any) => {
-    setMyIdx(event.currentTarget.id);
+  const onClickEditCancel = (event: MouseEvent<HTMLButtonElement>) => {
+    setMyIdx(Number(event.currentTarget.id));
   };
 
-  const onClickQuestion = (event) => {
-    setOnQuestion(event.currentTarget.id);
+  const onClickQuestion = (event: MouseEvent<HTMLButtonElement>) => {
+    setOnQuestion(Number(event.currentTarget.id));
     setUseditemQuestionId(event.currentTarget.id);
   };
 
@@ -221,7 +167,7 @@ export default function MarketCommentListIndex() {
             hasMore={true}
             useWindow={false}
           >
-            {data?.fetchUseditemQuestions.map((el, idx) =>
+            {data?.fetchUseditemQuestions.map((el: any, idx: number) =>
               el._id !== MyIdx ? (
                 <S.AllCommentsBox key={el._id}>
                   <S.CommentBox>

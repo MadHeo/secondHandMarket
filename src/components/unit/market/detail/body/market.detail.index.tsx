@@ -216,7 +216,7 @@ export default function MarketDetailIndex() {
             <S.MapText>거래 위치 확인해주세요!</S.MapText>
             <S.MapContents>
               <UseGetKakaoMap
-                address={data?.fetchUseditem?.useditemAddress.address}
+                address={data?.fetchUseditem?.useditemAddress?.address}
               />
             </S.MapContents>
           </S.MapBox>
