@@ -1,16 +1,14 @@
 import { useRouter } from "next/router";
 import { useForm } from "react-hook-form";
-import { ChangeEvent, useMemo, useState } from "react";
-import { useMutation } from "@apollo/client";
-import {
-  IMutation,
-  IMutationLoginUserArgs,
-} from "../../../commons/types/generated/types";
 import { useRecoilState } from "recoil";
 import { accessTokenState } from "../../../commons/store";
-import { gql } from "@apollo/client";
 import * as S from "./login.style";
 import { useMutationLoginUser } from "../../../hooks/api/mutation/useMutationLoginUser";
+
+interface IData {
+  email: string;
+  password: string;
+}
 
 export default function LoginIndex(): JSX.Element {
   const router = useRouter();
@@ -19,15 +17,14 @@ export default function LoginIndex(): JSX.Element {
     register,
     formState: { errors },
   } = useForm();
-  const onSubmit = (values) => console.log(values);
 
   const [, setAccessToken] = useRecoilState(accessTokenState);
   const [loginUser] = useMutationLoginUser();
 
-  const onClickLogin = async (): Promise<void> => {
+  const onClickLogin = async (data: IData): Promise<void> => {
     try {
       const result = await loginUser({
-        variables: { email, password },
+        variables: { email: data.email, password: data.password },
       });
 
       const accessToken = result.data?.loginUser.accessToken;
@@ -54,25 +51,12 @@ export default function LoginIndex(): JSX.Element {
               <S.Input
                 type="email"
                 placeholder="이메일 계정"
-                {...register("email", {
-                  required: "Required",
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "영문/숫자/특수문자가 포함되어야 합니다.",
-                  },
-                })}
+                {...register("email")}
               ></S.Input>
               <S.Input
                 type="password"
                 placeholder="비밀번호"
-                {...register("password", {
-                  required: "Required",
-                  pattern: {
-                    value:
-                      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{3,8}$/,
-                    message: "영문/숫자/특수문자가 포함되어야 합니다.",
-                  },
-                })}
+                {...register("password")}
               ></S.Input>
               <S.LoginButton>로그인</S.LoginButton>
             </S.InputBox>

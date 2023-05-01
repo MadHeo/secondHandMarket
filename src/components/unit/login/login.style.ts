@@ -15,6 +15,13 @@ export const SubBox = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 export const LoginImage = styled.img`

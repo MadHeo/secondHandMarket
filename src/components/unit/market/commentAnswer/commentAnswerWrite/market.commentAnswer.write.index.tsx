@@ -81,7 +81,6 @@ export default function MarketCommentAnswerWriteIndex(): JSX.Element {
 
   const OnChangeContents = (event: ChangeEvent<HTMLInputElement>) => {
     setContents(event.target.value);
-    console.log(event.target.value);
   };
 
   return (

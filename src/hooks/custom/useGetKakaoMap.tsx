@@ -4,7 +4,7 @@ declare const window: typeof globalThis & {
   kakao: any;
 };
 
-export const UseGetKakaoMap = (props: string): JSX.Element => {
+export const UseGetKakaoMap = (props: any): JSX.Element => {
   // const kakaomap = () => {
   useEffect(() => {
     const script = document.createElement("script");
