@@ -38,6 +38,7 @@ export default function ChargeIndex(): JSX.Element {
         pg: "kakaopay",
         pay_method: "card",
         name: "secondHandMarketPoint",
+
         amount: price, // 숫자 타입
         buyer_email: "gildong@gmail.com",
         buyer_name: "홍길동",

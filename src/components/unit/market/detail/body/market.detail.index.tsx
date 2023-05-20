@@ -1,4 +1,4 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { UseGetKakaoMap } from "../../../../../hooks/custom/useGetKakaoMap";
@@ -9,70 +9,19 @@ import "slick-carousel/slick/slick-theme.css";
 import { IUseditem } from "../../../../../commons/types/generated/types";
 import { useAuth } from "../../../../../hooks/custom/useAuth";
 import DOMPurify from "dompurify";
-
-export const CREATE_POINT_TRANSACTION_OF_BUYING_AND_SELLING = gql`
-  mutation createPointTransactionOfBuyingAndSelling($useritemId: ID!) {
-    createPointTransactionOfBuyingAndSelling(useritemId: $useritemId) {
-      _id
-      name
-      remarks
-      contents
-      price
-    }
-  }
-`;
-
-export const FETCH_USED_ITEM = gql`
-  query fetchUseditem($useditemId: ID!) {
-    fetchUseditem(useditemId: $useditemId) {
-      _id
-      name
-      remarks
-      contents
-      price
-      createdAt
-      images
-      tags
-      pickedCount
-      seller {
-        _id
-        email
-        name
-      }
-      useditemAddress {
-        _id
-        address
-        addressDetail
-        lat
-        lng
-      }
-    }
-  }
-`;
-
-export const DELETE_USED_ITEM = gql`
-  mutation deleteUseditem($useditemId: ID!) {
-    deleteUseditem(useditemId: $useditemId)
-  }
-`;
-
-export const TOGGLE_USED_ITEM_PICK = gql`
-  mutation toggleUseditemPick($useditemId: ID!) {
-    toggleUseditemPick(useditemId: $useditemId)
-  }
-`;
+import * as T from "./market.detail.query";
 
 export default function MarketDetailIndex() {
   const router = useRouter();
-  const [deleteUseditem] = useMutation(DELETE_USED_ITEM);
-  const [toggleUseditemPick] = useMutation(TOGGLE_USED_ITEM_PICK);
+  const [deleteUseditem] = useMutation(T.DELETE_USED_ITEM);
+  const [toggleUseditemPick] = useMutation(T.TOGGLE_USED_ITEM_PICK);
   const [createBuying] = useMutation(
-    CREATE_POINT_TRANSACTION_OF_BUYING_AND_SELLING
+    T.CREATE_POINT_TRANSACTION_OF_BUYING_AND_SELLING
   );
 
   useAuth();
 
-  const { data, refetch } = useQuery(FETCH_USED_ITEM, {
+  const { data, refetch } = useQuery(T.FETCH_USED_ITEM, {
     variables: { useditemId: router.query.itemId },
   });
 
@@ -133,7 +82,7 @@ export default function MarketDetailIndex() {
         },
         refetchQueries: [
           {
-            query: FETCH_USED_ITEM,
+            query: T.FETCH_USED_ITEM,
             variables: {
               useditemId: router.query.itemId,
             },
