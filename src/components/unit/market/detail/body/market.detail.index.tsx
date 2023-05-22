@@ -1,12 +1,10 @@
 import { useMutation, useQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { UseGetKakaoMap } from "../../../../../hooks/custom/useGetKakaoMap";
 import * as S from "./market.detail.style";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { IUseditem } from "../../../../../commons/types/generated/types";
 import { useAuth } from "../../../../../hooks/custom/useAuth";
 import DOMPurify from "dompurify";
 import * as T from "./market.detail.query";
@@ -29,19 +27,19 @@ export default function MarketDetailIndex() {
     router.push("/market/list");
   };
 
-  useEffect(() => {
-    let getTodayItem: any = localStorage.getItem("data");
-    if (getTodayItem === null) {
-      getTodayItem = [];
-    } else {
-      getTodayItem = JSON.parse(getTodayItem);
-    }
-    getTodayItem.unshift(data?.fetchUseditem);
-    getTodayItem = new Set(getTodayItem);
-    getTodayItem = [...getTodayItem];
+  // useEffect(() => {
+  //   let getTodayItem: any = localStorage.getItem("data");
+  //   if (getTodayItem === null) {
+  //     getTodayItem = [];
+  //   } else {
+  //     getTodayItem = JSON.parse(getTodayItem);
+  //   }
+  //   getTodayItem.unshift(data?.fetchUseditem);
+  //   getTodayItem = new Set(getTodayItem);
+  //   getTodayItem = [...getTodayItem];
 
-    localStorage.setItem("data", JSON.stringify(getTodayItem));
-  });
+  //   localStorage.setItem("data", JSON.stringify(getTodayItem));
+  // });
 
   const onClickEditBtn = () => {
     // router.push(`/products/${router.query.productId}/edit`);

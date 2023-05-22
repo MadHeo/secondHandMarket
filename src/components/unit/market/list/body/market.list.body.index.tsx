@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
-import {
-  FetchUseditems,
-  useQueryFetchUseditems,
-} from "../../../../../hooks/api/query/FetchUseditems";
+import { FetchUseditems } from "../../../../../hooks/api/query/FetchUseditems";
 import { useMoveToPage } from "../../../../../hooks/custom/useMoveToPage";
 import * as S from "./market.list.body.style";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/router";
 import { gql, useQuery } from "@apollo/client";
+import { useAddTodayItem } from "../../../../../hooks/custom/useAddTodayItem";
 
 export const FETCH_USED_ITEM = gql`
   query fetchUseditem($useditemId: ID!) {
@@ -41,6 +39,7 @@ export default function MarketListBody(props): JSX.Element {
   const router = useRouter();
   const { data, refetch, fetchMore } = FetchUseditems();
   const { onClickMoveToPage } = useMoveToPage();
+  const { onClickAddTodayItem } = useAddTodayItem();
   const [position, setPosition] = useState(0);
 
   const { data: usedItemData } = useQuery(FETCH_USED_ITEM, {
@@ -97,10 +96,7 @@ export default function MarketListBody(props): JSX.Element {
             useWindow={false}
           >
             {props.data?.fetchUseditems.map((el, idx) => (
-              <S.ProductCard
-                key={uuidv4()}
-                onClick={onClickMoveToPage(`/market/${el._id}`)}
-              >
+              <S.ProductCard key={uuidv4()} onClick={onClickAddTodayItem(el)}>
                 <S.ProductCardImageBox>
                   {el.images[0] ? (
                     <img
